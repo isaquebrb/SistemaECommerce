@@ -5,6 +5,8 @@
  */
 package model.domain;
 
+import Utils.ValidacaoException;
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="TB_CLIENTE")
-public class Cliente {
+public class Cliente implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,9 +59,6 @@ public class Cliente {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
         if (obj == null) {
             return false;
         }
@@ -67,13 +66,16 @@ public class Cliente {
             return false;
         }
         final Cliente other = (Cliente) obj;
-        if (!Objects.equals(this.nome, other.nome)) {
-            return false;
-        }
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
         return true;
     }
+    
+    public void validar() throws ValidacaoException{
+         if(this.nome.equals("") || this.nome == null){
+             throw new ValidacaoException("Campo nome vazio");
+         }
+     }
     
 }
